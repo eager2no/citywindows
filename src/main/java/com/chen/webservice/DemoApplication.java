@@ -1,7 +1,7 @@
-package com.czw.newone.demo;
+package com.chen.webservice;
 
-import com.czw.newone.demo.model.Order;
-import com.czw.newone.demo.service.ProgrammeBiz;
+import com.chen.webservice.model.Order;
+import com.chen.webservice.service.ProgrammeBiz;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootApplication()
-@MapperScan("com.czw.newone.demo.dao")
+@MapperScan("com.chen.webservice.dao")
 public class DemoApplication {
     private static final long startTime = 43200000;
 
@@ -60,7 +60,7 @@ public class DemoApplication {
         for (int i = 0; i < len; i++) {
             Order order = new Order(startTime, endTime - startTime);
             try {
-                Thread.sleep(100);
+                Thread.sleep(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

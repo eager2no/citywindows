@@ -1,7 +1,7 @@
-package com.czw.newone.demo.controller;
+package com.chen.webservice.controller;
 
-import com.czw.newone.demo.model.Programme;
-import com.czw.newone.demo.service.ProgrammeBiz;
+import com.chen.webservice.model.Programme;
+import com.chen.webservice.service.ProgrammeBiz;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

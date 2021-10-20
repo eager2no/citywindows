@@ -1,7 +1,7 @@
-package com.czw.newone.demo.model;
+package com.chen.webservice.model;
 
 import lombok.Data;
-import com.czw.newone.demo.Utils.CityConstants;
+import com.chen.webservice.Utils.CityConstants;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.czw.newone.demo.model;
+package com.chen.webservice.model;
 
 import lombok.Data;
 

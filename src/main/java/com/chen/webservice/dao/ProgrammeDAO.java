@@ -1,6 +1,6 @@
-package com.czw.newone.demo.dao;
+package com.chen.webservice.dao;
 
-import com.czw.newone.demo.model.Programme;
+import com.chen.webservice.model.Programme;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

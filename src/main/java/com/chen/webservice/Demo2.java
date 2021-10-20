@@ -1,25 +1,11 @@
-package com.czw.newone.demo; /*******************************************************************************
- * Copyright 2012 Yuriy Lagodiuk
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+package com.chen.webservice;
 
-import com.czw.newone.demo.model.Order;
-import com.lagodiuk.ga.Chromosome;
-import com.lagodiuk.ga.Fitness;
-import com.lagodiuk.ga.GeneticAlgorithm;
-import com.lagodiuk.ga.IterartionListener;
-import com.lagodiuk.ga.Population;
+import com.chen.webservice.model.Order;
+import com.chen.ga.Chromosome;
+import com.chen.ga.Fitness;
+import com.chen.ga.GeneticAlgorithm;
+import com.chen.ga.IterartionListener;
+import com.chen.ga.Population;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static com.czw.newone.demo.DemoApplication.initOrders;
+import static com.chen.webservice.DemoApplication.initOrders;
 
 public class Demo2 {
 
@@ -41,6 +27,8 @@ public class Demo2 {
         addListener(ga);
 
         ga.evolve(50);
+
+        System.out.println("finished!");
     }
 
     /**
@@ -96,8 +84,6 @@ public class Demo2 {
 
         private static final Random random = new Random();
 
-        private final int[] vector = new int[5];
-
         private List<Order> orders = initOrders(10);
 
         /**
@@ -152,14 +138,6 @@ public class Demo2 {
             return clone;
         }
 
-        public int[] getVector() {
-            return this.vector;
-        }
-
-        @Override
-        public String toString() {
-            return Arrays.toString(this.vector);
-        }
     }
 
     /**
@@ -180,7 +158,7 @@ public class Demo2 {
         private double sqr(MyOrder x) {
             List<Order> orders = x.orders;
             double rate = 1;
-            if (orders.get(0).getPlayTime() < 15001) {
+            if (orders.get(0).getPlayTime() < 15001 &&orders.get(1).getPlayTime() > 15001&&orders.get(2).getPlayTime() > 15001&&orders.get(3).getPlayTime() == 15000) {
                 return rate;
             } else {
                 return rate + 1;

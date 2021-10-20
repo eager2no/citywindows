@@ -1,7 +1,7 @@
-package com.czw.newone.demo.service;
+package com.chen.webservice.service;
 
-import com.czw.newone.demo.dao.ProgrammeDAO;
-import com.czw.newone.demo.model.Programme;
+import com.chen.webservice.dao.ProgrammeDAO;
+import com.chen.webservice.model.Programme;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
