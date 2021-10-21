@@ -24,7 +24,7 @@ public class Order {
     private int aging;//时效
 
     public Order(long startTime, long endTime) {
-        this.id = System.currentTimeMillis();
+        this.id = System.currentTimeMillis()-randInt(1000);
         this.orderId = this.id;
         this.startTime = randLong() % endTime + startTime;
 

@@ -1,6 +1,8 @@
 
 package com.chen.ga;
 
+import com.chen.webservice.Demo2;
+
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 		}
 
 		public T fit(C chr) {
-			T fit = this.cache.get(chr);
+			T fit = null;
 			if (fit == null) {
 				fit = GeneticAlgorithm.this.fitnessFunc.calculate(chr);
 				this.cache.put(chr, fit);
@@ -101,6 +103,8 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 				l.update(this);
 			}
 		}
+
+		System.out.println("");
 	}
 
 	public int getIteration() {
@@ -117,6 +121,10 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 	public C getBest() {
 		return this.population.getChromosomeByIndex(0);
+	}
+
+	public List<C> getAll() {
+		return this.population.getChromosomes();
 	}
 
 	public C getWorst() {
