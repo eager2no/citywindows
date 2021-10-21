@@ -22,6 +22,7 @@ public class CategoryTypeHandler implements RuleHandler {
 
     @Override
     public int checkResult(List<Order> orders, int rate) {
+        rate = 0;
         int len = orders.size();
         if (len <= 1) {
             return rate;

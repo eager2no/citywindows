@@ -22,6 +22,31 @@ public class Order {
     private int color;//色系
     private int rate;//评分
     private int aging;//时效
+    
+    public Order(){
+        
+    }
+    
+    public Order deepCopy(){
+        return new Order(this);
+    }    
+    public Order(Order other){
+        this.id=other.id;
+        this.orderId=other.orderId;
+        //    private
+        this.startTime=other.startTime;
+        this.endTime=other.endTime;
+        this.playTime=other.playTime;
+        this.playFrequency=other.playFrequency;
+        this.playPeriod=other.playPeriod;
+        this.landmarkId=other.landmarkId;
+        this.category=other.category;
+        this.categorySub=other.categorySub;
+        this.style=other.style;
+        this.color=other.color;
+        this.rate=other.rate;
+        this.aging=other.aging;
+    }
 
     public Order(long startTime, long endTime) {
         this.id = System.currentTimeMillis()-randInt(1000);
@@ -31,7 +56,7 @@ public class Order {
         this.playTime = CityConstants.PLAY_TIME.get(randInt(5));
         this.endTime =this.startTime + this.playTime;
 
-        this.playFrequency = 1 + randInt(5);
+        this.playFrequency = 1 + randInt(3);
         this.playPeriod = 1 + randInt(30);
         this.category = randInt(3);
         this.categorySub = randInt(30);

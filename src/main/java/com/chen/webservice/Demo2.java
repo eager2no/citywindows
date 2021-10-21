@@ -8,7 +8,11 @@ import com.chen.ga.GeneticAlgorithm;
 import com.chen.ga.IterartionListener;
 import com.chen.ga.Population;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -29,7 +33,7 @@ public class Demo2 {
 
         addListener(ga);
 
-        ga.evolve(500);
+        ga.evolve(50000);
 
         System.out.println("finished!");
 
@@ -44,7 +48,32 @@ public class Demo2 {
      * @dateTime: 2021/10/21 下午7:13
      */
     private static void sout(List<Order> orders) {
+        long nowDay = getTodayZeroPointTimestamps();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long startTime =nowDay + 43200000;
+        System.out.println("节目单：\n");
+
+        for (Order order:orders){
+            long orderId = order.getOrderId();
+            String sd = sdf.format(new Date(startTime)); // 时间戳转换日期
+            System.out.print("时间："+sd);
+            System.out.print(", 节目id："+orderId);
+            System.out.println(", 节目分类："+order.getCategory());
+            startTime += order.getPlayTime();
+
+        }
+//String sd = sdf.format(new Date(Long.parseLong(beginDate))); // 时间戳转换日期
+
+
     }
+
+    public static Long getTodayZeroPointTimestamps() {
+        Long currentTimestamps = System.currentTimeMillis();
+        Long oneDayTimestamps = Long.valueOf(60 * 60 * 24 * 1000);
+        return currentTimestamps - (currentTimestamps + 60 * 60 * 8 * 1000) % oneDayTimestamps;
+    }
+
 
     /**
      * @description: 初始化初代个体
@@ -56,6 +85,7 @@ public class Demo2 {
     private static Population<MyOrder> createInitialPopulation(int populationSize) {
         Population<MyOrder> population = new Population<MyOrder>();
         MyOrder base = new MyOrder();
+        processFreq(base.orders);
         for (int i = 0; i < populationSize; i++) {
             // each member of initial population
             // is mutated clone of base chromosome
@@ -63,6 +93,21 @@ public class Demo2 {
             population.addChromosome(chr);
         }
         return population;
+    }
+
+    private static void processFreq(List<Order> orders) {
+        List<Order> freqOrders = new ArrayList<>();
+        for(Order order : orders){
+            if(order.getPlayFrequency()<=1){
+                continue;
+            }
+            for(int i = 0; i<order.getPlayFrequency();i++){
+                Order freqOrder = order.deepCopy();
+                freqOrders.add(freqOrder);
+            }
+        }
+        orders.addAll(freqOrders);
+        Collections.shuffle(orders);
     }
 
     /**
