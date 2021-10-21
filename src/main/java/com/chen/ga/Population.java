@@ -8,6 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @description: 一代
+ * @params:
+ * @return:
+ * @author: chenzhiwen
+ * @dateTime: 2021/10/21 下午7:21
+ */
 public class Population<C extends Chromosome<C>> implements Iterable<C> {
 
 	private static final int DEFAULT_NUMBER_OF_CHROMOSOMES = 32;

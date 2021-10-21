@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+/**
+ * @description: 遗传算法主体
+ * @params:
+ * @return:
+ * @author: chenzhiwen
+ * @dateTime: 2021/10/21 下午7:19
+ */
 public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> {
 
 	private static final int ALL_PARENTAL_CHROMOSOMES = Integer.MAX_VALUE;
@@ -16,6 +23,11 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 	private class ChromosomesComparator implements Comparator<C> {
 
 		private final Map<C, T> cache = new WeakHashMap<C, T>();
+		private List<Integer> rules;
+
+		public ChromosomesComparator(List<Integer> rules){
+			this.rules = rules;
+		}
 
 		@Override
 		public int compare(C chr1, C chr2) {
@@ -28,7 +40,7 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 		public T fit(C chr) {
 			T fit = null;
 			if (fit == null) {
-				fit = GeneticAlgorithm.this.fitnessFunc.calculate(chr);
+				fit = GeneticAlgorithm.this.fitnessFunc.calculate(chr, rules);
 				this.cache.put(chr, fit);
 			}
 			return fit;
@@ -56,10 +68,10 @@ public class GeneticAlgorithm<C extends Chromosome<C>, T extends Comparable<T>> 
 
 	private int iteration = 0;
 
-	public GeneticAlgorithm(Population<C> population, Fitness<C, T> fitnessFunc) {
+	public GeneticAlgorithm(Population<C> population, Fitness<C, T> fitnessFunc, List<Integer> rules) {
 		this.population = population;
 		this.fitnessFunc = fitnessFunc;
-		this.chromosomesComparator = new ChromosomesComparator();
+		this.chromosomesComparator = new ChromosomesComparator(rules);
 		this.population.sortPopulationByFitness(this.chromosomesComparator);
 	}
 

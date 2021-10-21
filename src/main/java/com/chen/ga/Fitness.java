@@ -1,15 +1,17 @@
 
 package com.chen.ga;
 
+import java.util.List;
+
 public interface Fitness<C extends Chromosome<C>, T extends Comparable<T>> {
 
 	/**
-	 * Assume that chromosome1 is better than chromosome2 <br/>
-	 * fit1 = calculate(chromosome1) <br/>
-	 * fit2 = calculate(chromosome2) <br/>
-	 * So the following condition must be true <br/>
-	 * fit1.compareTo(fit2) <= 0 <br/>
+	 * @description: 用于选择较优解
+	 * @params: [chromosome, rules]
+	 * @return: T
+	 * @author: chenzhiwen
+	 * @dateTime: 2021/10/21 下午7:20
 	 */
-	T calculate(C chromosome);
+	T calculate(C chromosome, List<Integer> rules);
 
 }

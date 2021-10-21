@@ -1,5 +1,6 @@
 package com.chen.webservice;
 
+import com.chen.webservice.Utils.RuleHandler;
 import com.chen.webservice.model.Order;
 import com.chen.ga.Chromosome;
 import com.chen.ga.Fitness;
@@ -7,14 +8,13 @@ import com.chen.ga.GeneticAlgorithm;
 import com.chen.ga.IterartionListener;
 import com.chen.ga.Population;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static com.chen.webservice.DemoApplication.initOrders;
-import static com.chen.webservice.Utils.Rules.businessFirst;
+import static com.chen.webservice.Utils.RuleChain.ruleHandleMap;
 
 public class Demo2 {
 
@@ -23,18 +23,35 @@ public class Demo2 {
 
         Fitness<MyOrder, Double> fitness = new MyVectorFitness();
 
-        GeneticAlgorithm<MyOrder, Double> ga = new GeneticAlgorithm<MyOrder, Double>(population, fitness);
+        List<Integer> rules = Arrays.asList(1);
+
+        GeneticAlgorithm<MyOrder, Double> ga = new GeneticAlgorithm<MyOrder, Double>(population, fitness, rules);
 
         addListener(ga);
 
         ga.evolve(500);
 
         System.out.println("finished!");
+
+        sout(ga.getPopulation().getChromosomeByIndex(0).orders);
     }
 
     /**
-     * The simplest strategy for creating initial population <br/>
-     * in real life it could be more complex
+     * @description: 打印最终排片
+     * @params: [orders]
+     * @return: void
+     * @author: chenzhiwen
+     * @dateTime: 2021/10/21 下午7:13
+     */
+    private static void sout(List<Order> orders) {
+    }
+
+    /**
+     * @description: 初始化初代个体
+     * @params: [populationSize]
+     * @return: com.chen.ga.Population<com.chen.webservice.Demo2.MyOrder>
+     * @author: chenzhiwen
+     * @dateTime: 2021/10/21 下午7:13
      */
     private static Population<MyOrder> createInitialPopulation(int populationSize) {
         Population<MyOrder> population = new Population<MyOrder>();
@@ -49,7 +66,11 @@ public class Demo2 {
     }
 
     /**
-     * After each iteration Genetic algorithm notifies listener
+     * @description: 监听迭代
+     * @params: [ga]
+     * @return: void
+     * @author: chenzhiwen
+     * @dateTime: 2021/10/21 下午7:13
      */
     private static void addListener(GeneticAlgorithm<MyOrder, Double> ga) {
         // just for pretty print
@@ -65,6 +86,7 @@ public class Demo2 {
 
                 MyOrder best = ga.getBest();
                 List<MyOrder> myOrders = ga.getAll();
+                //输出当前代个体适应度值
                 String fi = getFit(ga, myOrders);
                 double bestFit = ga.fitness(best);
                 int iteration = ga.getIteration();
@@ -83,18 +105,22 @@ public class Demo2 {
     }
 
     private static String getFit(GeneticAlgorithm<MyOrder, Double> ga, List<MyOrder> myOrders) {
-            StringBuilder desc = new StringBuilder();
-            myOrders.forEach(myOrder -> {
-                String x = ga.fitness(myOrder)+" ";
-                desc.append(x);
+        StringBuilder desc = new StringBuilder();
+        myOrders.forEach(myOrder -> {
+            String x = ga.fitness(myOrder) + " ";
+            desc.append(x);
 
-            });
-            return desc.toString();
+        });
+        return desc.toString();
     }
 
 
     /**
-     * Chromosome, which represents vector of five integers
+     * @description: 排片 bean
+     * @params:
+     * @return:
+     * @author: chenzhiwen
+     * @dateTime: 2021/10/21 下午7:14
      */
     public static class MyOrder implements Chromosome<MyOrder>, Cloneable {
 
@@ -103,7 +129,11 @@ public class Demo2 {
         private List<Order> orders = initOrders(10);
 
         /**
-         * Returns clone of current chromosome, which is mutated a bit
+         * @description: 变异
+         * @params: []
+         * @return: com.chen.webservice.Demo2.MyOrder
+         * @author: chenzhiwen
+         * @dateTime: 2021/10/21 下午7:15
          */
         @Override
         public MyOrder mutate() {
@@ -124,27 +154,16 @@ public class Demo2 {
         }
 
         /**
-         * Returns list of siblings <br/>
-         * Siblings are actually new chromosomes, <br/>
-         * created using any of crossover strategy
+         * @description: 交叉
+         * @params: [other]
+         * @return: java.util.List<com.chen.webservice.Demo2.MyOrder>
+         * @author: chenzhiwen
+         * @dateTime: 2021/10/21 下午7:15
          */
         @Override
         public List<MyOrder> crossover(MyOrder other) {
             MyOrder thisClone = this.clone();
             MyOrder otherClone = other.clone();
-
-//            System.out.println("this clone size: "+thisClone.orders.size());
-            // one point crossover
-//            int index1 = random.nextInt((thisClone.orders.size() - 1));
-//            int index2 = random.nextInt((otherClone.orders.size() - 1));
-//            List<Order> thisOrders1 = thisClone.orders.subList(0, index1);
-//            List<Order> thisOrders2 = thisClone.orders.subList(index1, thisClone.orders.size() - 1);
-//            thisOrders2.addAll(thisOrders1);
-//            thisClone.orders = thisOrders2;
-//            List<Order> otherOrders1 = otherClone.orders.subList(0, index2);
-//            List<Order> otherOrders2 = otherClone.orders.subList(index2, otherClone.orders.size() - 1);
-//            otherOrders2.addAll(otherOrders1);
-//            otherClone.orders = otherOrders2;
 
             return Arrays.asList(thisClone, otherClone);
 
@@ -161,25 +180,28 @@ public class Demo2 {
     }
 
     /**
-     * Fitness function, which calculates difference between chromosomes vector
-     * and target vector
+     * @description: 适应度函数，具体适应度规则在ruleChain指定
+     * @params:
+     * @return:
+     * @author: chenzhiwen
+     * @dateTime: 2021/10/21 下午7:15
      */
     public static class MyVectorFitness implements Fitness<MyOrder, Double> {
 
-//		private final int[] target = { 10, 20, 30, 40, 1000 };
-
         @Override
-        public Double calculate(MyOrder chromosome) {
+        public Double calculate(MyOrder chromosome, List<Integer> rules) {
             double delta = 0;
-            delta = this.sqr(chromosome);
-            return delta;
+
+            int ruleRate = 0;
+
+            for(Map.Entry<Integer, RuleHandler> entry: ruleHandleMap.entrySet()){
+                if(rules.contains(entry.getKey())){
+                    ruleRate += entry.getValue().checkResult(chromosome.orders, ruleRate);
+                }
+            }
+
+            return delta + ruleRate;
         }
 
-        private double sqr(MyOrder x) {
-            List<Order> orders = x.orders;
-            double rate = 0;
-            rate += businessFirst(orders);
-            return rate;
-        }
     }
 }
