@@ -51,15 +51,15 @@ public class Demo2 {
         long nowDay = getTodayZeroPointTimestamps();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long startTime =nowDay + 43200000;
+        long startTime = nowDay + 43200000;
         System.out.println("节目单：\n");
 
-        for (Order order:orders){
+        for (Order order : orders) {
             long orderId = order.getOrderId();
             String sd = sdf.format(new Date(startTime)); // 时间戳转换日期
-            System.out.print("时间："+sd);
-            System.out.print(", 节目id："+orderId);
-            System.out.println(", 节目分类："+order.getCategory());
+            System.out.print("时间：" + sd);
+            System.out.print(", 节目id：" + orderId);
+            System.out.println(", 节目分类：" + order.getCategory());
             startTime += order.getPlayTime();
 
         }
@@ -97,11 +97,11 @@ public class Demo2 {
 
     private static void processFreq(List<Order> orders) {
         List<Order> freqOrders = new ArrayList<>();
-        for(Order order : orders){
-            if(order.getPlayFrequency()<=1){
+        for (Order order : orders) {
+            if (order.getPlayFrequency() <= 1) {
                 continue;
             }
-            for(int i = 0; i<order.getPlayFrequency();i++){
+            for (int i = 0; i < order.getPlayFrequency(); i++) {
                 Order freqOrder = order.deepCopy();
                 freqOrders.add(freqOrder);
             }
@@ -125,6 +125,7 @@ public class Demo2 {
         ga.addIterationListener(new IterartionListener<MyOrder, Double>() {
 
             private final double threshold = 1e-5;
+            private int bestCount = 0;
 
             @Override
             public void update(GeneticAlgorithm<MyOrder, Double> ga) {
@@ -137,13 +138,16 @@ public class Demo2 {
                 int iteration = ga.getIteration();
 
                 // Listener prints best achieved solution
-                if (iteration % 10 == 0) {
+                if (iteration % 100 == 0) {
                     System.out.println(String.format("%s\t%s\t%s", iteration, bestFit, fi));
                 }
 
                 // If fitness is satisfying - we can stop Genetic algorithm
-                if (bestFit < this.threshold) {
-                    ga.terminate();
+                if (this.threshold > bestFit) {
+                    this.bestCount++;
+                    if (100 <= this.bestCount) {
+                        ga.terminate();
+                    }
                 }
             }
         });
@@ -239,8 +243,8 @@ public class Demo2 {
 
             int ruleRate = 0;
 
-            for(Map.Entry<Integer, RuleHandler> entry: ruleHandleMap.entrySet()){
-                if(rules.contains(entry.getKey())){
+            for (Map.Entry<Integer, RuleHandler> entry : ruleHandleMap.entrySet()) {
+                if (rules.contains(entry.getKey())) {
                     ruleRate += entry.getValue().checkResult(chromosome.orders, ruleRate);
                 }
             }

@@ -31,7 +31,7 @@ public class CategoryTypeHandler implements RuleHandler {
             Order o1 = orders.get(i);
             Order o2 = orders.get(i + 1);
             if (o1.getCategory() > o2.getCategory()) {
-                rate++;
+                rate+=1;
             }
         }
         return rate;
